@@ -4,7 +4,7 @@
 #
 Name     : sparsezoo
 Version  : 1.3.1
-Release  : 1
+Release  : 2
 URL      : https://github.com/neuralmagic/sparsezoo/archive/refs/tags/v1.3.1.tar.gz
 Source0  : https://github.com/neuralmagic/sparsezoo/archive/refs/tags/v1.3.1.tar.gz
 Summary  : No detailed summary available
@@ -55,6 +55,7 @@ python components for the sparsezoo package.
 Summary: python3 components for the sparsezoo package.
 Group: Default
 Requires: python3-core
+Provides: pypi(sparsezoo)
 
 %description python3
 python3 components for the sparsezoo package.
@@ -72,7 +73,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1674057018
+export SOURCE_DATE_EPOCH=1674058704
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -82,6 +83,9 @@ export FCFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -
 export FFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
 export CXXFLAGS="$CXXFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -g1 -gno-column-info -gno-variable-location-views -gz "
 export MAKEFLAGS=%{?_smp_mflags}
+pypi-dep-fix.py . click
+pypi-dep-fix.py . numpy
+pypi-dep-fix.py . protobuf
 python3 -m build --wheel --skip-dependency-check --no-isolation
 pushd ../buildavx2/
 export CFLAGS="$CFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 "
@@ -89,6 +93,9 @@ export CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 "
 export FFLAGS="$FFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 "
 export FCFLAGS="$FCFLAGS -m64 -march=x86-64-v3 "
 export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3 "
+pypi-dep-fix.py . click
+pypi-dep-fix.py . numpy
+pypi-dep-fix.py . protobuf
 python3 -m build --wheel --skip-dependency-check --no-isolation
 
 popd
@@ -100,6 +107,9 @@ mkdir -p %{buildroot}/usr/share/package-licenses/sparsezoo
 cp %{_builddir}/sparsezoo-%{version}/LICENSE %{buildroot}/usr/share/package-licenses/sparsezoo/0dece4cd82f7d1f382592ee79318ac0126c1aee7 || :
 cp %{_builddir}/sparsezoo-%{version}/NOTICE %{buildroot}/usr/share/package-licenses/sparsezoo/321caeefde174c62217e56cf8953ae8005911dc3 || :
 pip install --root=%{buildroot} --no-deps --ignore-installed dist/*.whl
+pypi-dep-fix.py %{buildroot} click
+pypi-dep-fix.py %{buildroot} numpy
+pypi-dep-fix.py %{buildroot} protobuf
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
